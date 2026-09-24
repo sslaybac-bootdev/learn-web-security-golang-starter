@@ -61,6 +61,11 @@ func (handler *Handler) Page(responseWriter http.ResponseWriter, request *http.R
 	if !ok {
 		return
 	}
+	user_map := make(map[string]any)
+	user_map["userId"] = current.User.ID
+	user_map["email"] = current.User.Email
+	user_map["expiresAt"] = current.Session.ExpiresAt
+	handler.logger.Event("account_accessed", user_map)
 	if err := handler.renderPage(responseWriter, http.StatusOK, current, ""); err != nil {
 		handler.internalError(responseWriter, request, err)
 	}
